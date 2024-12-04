@@ -54,8 +54,12 @@ function removeFirstOccurrences(str, value) {
   );
 }
 
-function removeLastOccurrences(/* str, value */) {
-  throw new Error('Not implemented');
+function removeLastOccurrences(str, value) {
+  return str.indexOf(value) === -1
+    ? str
+    : str
+        .substring(0, str.lastIndexOf(value))
+        .concat(str.substring(str.lastIndexOf(value) + value.length));
 }
 
 function sumOfCodes(str) {
@@ -79,24 +83,11 @@ function endsWith(str, substr) {
   return str.endsWith(substr);
 }
 
-/**
- * Returns a time string in the "mm:ss" format.
- *
- * @param {number} minutes - The number of minutes (non-negative integer).
- * @param {number} seconds - The number of seconds (non-negative integer).
- * @return {string} - The time string in the "mm:ss" format.
- *
- * @example
- *   formatTime(5, 30) => "05:30"
- *   formatTime(1, 15) => "01:15"
- *   formatTime(0, 45) => "00:45"
- *   formatTime(0, 0) => "00:00"
- */
 function formatTime(minutes, seconds) {
-  if (minutes > 9 && seconds > 9) {
-    return String.padStart(minutes, seconds);
-  }
-  return 'gvtfd';
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(
+    2,
+    '0'
+  )}`;
 }
 
 function reverseString(str) {
@@ -213,50 +204,22 @@ function unbracketTag(str) {
   return str.substring(str.indexOf('<') + 1, str.indexOf('>'));
 }
 
-/**
- * Extracts e-mails from single string with e-mails list delimited by semicolons
- *
- * @param {string} str - The input string.
- * @return {array} - The list of e-mails extracted from the string.
- *
- * @example
- *   'angus.young@gmail.com;brian.johnson@hotmail.com;bon.scott@yahoo.com'
- *   => [
- *      'angus.young@gmail.com',
- *      'brian.johnson@hotmail.com',
- *      'bon.scott@yahoo.com'
- *   ],
- *   'info@gmail.com' => ['info@gmail.com']
- */
 function extractEmails(str) {
-  return str
-    .split(';')
-    .filter((elem) => elem.length !== 0)
-    .forEach((elem) => {
-      if (elem === ';') {
-        elem.substring(1);
-      }
-    });
+  return str.split(';');
 }
 
-/**
- * Encode specified string with ROT13 cipher
- * See details:  https://en.wikipedia.org/wiki/ROT13
- *
- * @param {string} str - The input string.
- * @return {string} - The ROT13 encoded string.
- *
- * @example
- *
- *   'hello' => 'uryyb'
- *   'Why did the chicken cross the road?' => 'Jul qvq gur puvpxra pebff gur ebnq?'
- *   'Gb trg gb gur bgure fvqr!' => 'To get to the other side!'
- *   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
- *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
- *
- */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  const nice = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  const notNice = 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm';
+  let result = '';
+  str.split('').forEach((char) => {
+    if (nice.indexOf(char) === -1) {
+      result += char;
+    } else {
+      result += notNice.charAt(nice.indexOf(char));
+    }
+  });
+  return result;
 }
 
 /**
